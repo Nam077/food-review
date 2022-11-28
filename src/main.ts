@@ -7,6 +7,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     // validate with pipe validation
     app.useGlobalPipes(new ValidationPipe());
+    // swagger config
     const options = new DocumentBuilder()
         .setTitle('Food Review')
         .setDescription('The Food Review API description')
