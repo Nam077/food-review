@@ -3,6 +3,7 @@ import { ReactionService } from '../service/reaction.service';
 import { CreateReactionDto } from '../dto/create-reaction.dto';
 import { UpdateReactionDto } from '../dto/update-reaction.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GetCurrentUserId } from '../../../decorators/auth/custom.auth';
 
 @ApiBearerAuth()
 @ApiTags('Reaction')
@@ -13,6 +14,30 @@ export class ReactionController {
     @Post()
     @ApiOperation({ summary: 'Create reaction' })
     create(@Body() createReactionDto: CreateReactionDto) {
+        return this.reactionService.create(createReactionDto);
+    }
+
+    @Post('/post/:idPost')
+    @ApiOperation({ summary: 'Get reactions by post' })
+    checkReactionsByPost(
+        @Param('idPost') idPost: string,
+        @GetCurrentUserId() userId: number,
+        @Body() updateReactionDto: UpdateReactionDto,
+    ) {
+        updateReactionDto.idUser = userId;
+
+        return this.reactionService.checkReactionsByPost(+idPost, updateReactionDto, userId);
+    }
+
+    @Post('/user/create/:idPost')
+    @ApiOperation({ summary: 'Create reaction by user' })
+    createReactionByUser(
+        @Param('idPost') idPost: string,
+        @GetCurrentUserId() userId: number,
+        @Body() createReactionDto: CreateReactionDto,
+    ) {
+        createReactionDto.idUser = userId;
+        createReactionDto.idPost = +idPost;
         return this.reactionService.create(createReactionDto);
     }
 

@@ -7,7 +7,6 @@ export class CreateRateDto {
     @ApiProperty({ description: 'IdUser', example: 1 })
     @IsNumber({}, { message: 'IdUser must be a number' })
     @IsNotEmpty({ message: 'IdUser is required' })
-    @IdUserExists({ message: 'IdUser does not exist' })
     idUser: number;
 
     @ApiProperty({ description: 'IdPost', example: 1 })

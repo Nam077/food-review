@@ -18,7 +18,7 @@ export class IdUserExistsConstraint implements ValidatorConstraintInterface {
 }
 
 export function IdUserExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName,
@@ -39,7 +39,7 @@ export class IdPostExistsConstraint implements ValidatorConstraintInterface {
 }
 
 export function IdPostExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
@@ -60,7 +60,7 @@ export class IdCommentExistsConstraint implements ValidatorConstraintInterface {
 }
 
 export function IdCommentExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
@@ -81,7 +81,7 @@ export class IdImageExistsConstraint implements ValidatorConstraintInterface {
 }
 
 export function IdImageExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
@@ -102,7 +102,7 @@ export class IdRateExistsConstraint implements ValidatorConstraintInterface {
 }
 
 export function IdRateExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
@@ -123,7 +123,7 @@ export class IdReactionExistsConstraint implements ValidatorConstraintInterface 
 }
 
 export function IdReactionExists(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
@@ -144,13 +144,32 @@ export class EmailIsUniqueConstraint implements ValidatorConstraintInterface {
 }
 
 export function EmailIsUnique(validationOptions?: any) {
-    return function (object: Object, propertyName: string) {
+    return function (object: any, propertyName: string) {
         registerDecorator({
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
             constraints: [],
             validator: EmailIsUniqueConstraint,
+        });
+    };
+}
+// check if the file is an image
+@ValidatorConstraint({ name: 'IsImage', async: true })
+export class IsImageConstraint implements ValidatorConstraintInterface {
+    validate(file: any) {
+        return file.mimetype.startsWith('image/');
+    }
+}
+
+export function IsImage(validationOptions?: any) {
+    return function (object: any, propertyName: string) {
+        registerDecorator({
+            target: object.constructor,
+            propertyName: propertyName,
+            options: validationOptions,
+            constraints: [],
+            validator: IsImageConstraint,
         });
     };
 }

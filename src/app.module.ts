@@ -19,6 +19,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ImageModule } from './modules/image/image.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './modules/auth/guards/at.guard';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
     imports: [
@@ -40,6 +43,13 @@ import { AtGuard } from './modules/auth/guards/at.guard';
             models: [User, UserDetail, Post, Comment, Reaction, Rate, Image],
             synchronize: true,
             autoLoadModels: true,
+            logging: false,
+        }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'uploads'),
+        }),
+        MulterModule.register({
+            dest: './uploads',
         }),
     ],
     controllers: [AppController],

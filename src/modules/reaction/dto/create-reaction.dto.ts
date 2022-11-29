@@ -8,7 +8,7 @@ export class CreateReactionDto {
     @IsNumber({}, { message: 'IdUser must be a number' })
     @IsNotEmpty({ message: 'IdUser is required' })
     @IdUserExists({ message: 'IdUser does not exist' })
-    idUser: number;
+    idUser?: number;
 
     @ApiProperty({ description: 'IdPost', example: 1 })
     @IsNumber({}, { message: 'IdPost must be a number' })

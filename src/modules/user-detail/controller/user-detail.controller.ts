@@ -3,6 +3,7 @@ import { CreateUserDetailDto } from '../dto/create-user-detail.dto';
 import { UserDetailService } from '../service/user-detail.service';
 import { UpdateUserDetailDto } from '../dto/update-user-detail.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GetCurrentUserId } from '../../../decorators/auth/custom.auth';
 
 @ApiBearerAuth()
 @ApiTags('User Detail')
@@ -38,5 +39,17 @@ export class UserDetailController {
     @ApiOperation({ summary: 'Delete user detail by id' })
     remove(@Param('id') id: string) {
         return this.userDetailService.remove(+id);
+    }
+
+    @Get('/user/')
+    @ApiOperation({ summary: 'Get user detail by user id' })
+    userDetailByUser(@GetCurrentUserId() userId: number) {
+        return this.userDetailService.findOne(userId);
+    }
+
+    @Patch('/user/')
+    @ApiOperation({ summary: 'Update user detail by user id' })
+    updateUserDetailByUser(@Body() updateUserDetailDto: UpdateUserDetailDto, @GetCurrentUserId() userId: number) {
+        return this.userDetailService.update(userId, updateUserDetailDto);
     }
 }

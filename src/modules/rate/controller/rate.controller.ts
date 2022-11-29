@@ -3,6 +3,7 @@ import { RateService } from '../service/rate.service';
 import { CreateRateDto } from '../dto/create-rate.dto';
 import { UpdateRateDto } from '../dto/update-rate.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GetCurrentUserId } from '../../../decorators/auth/custom.auth';
 
 @ApiTags('Rate')
 @ApiBearerAuth()
@@ -14,6 +15,29 @@ export class RateController {
     @ApiOperation({ summary: 'Create rate' })
     create(@Body() createRateDto: CreateRateDto) {
         return this.rateService.create(createRateDto);
+    }
+
+    @Post('/user/create/:idPost')
+    @ApiOperation({ summary: 'Create Rate by user' })
+    createRateByUser(
+        @Param('idPost') idPost: string,
+        @GetCurrentUserId() userId: number,
+        @Body() createRateDto: CreateRateDto,
+    ) {
+        createRateDto.idUser = userId;
+        createRateDto.idPost = +idPost;
+        return this.rateService.create(createRateDto);
+    }
+
+    @Post('/post/:idPost')
+    @ApiOperation({ summary: 'Get rate by post' })
+    checkRateByPost(
+        @Param('idPost') idPost: string,
+        @GetCurrentUserId() userId: number,
+        @Body() updateRateDto: UpdateRateDto,
+    ) {
+        updateRateDto.idUser = userId;
+        return this.rateService.checkRateByPost(+idPost, updateRateDto, userId);
     }
 
     @Get()

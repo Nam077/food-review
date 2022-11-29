@@ -3,6 +3,7 @@ import { CommentService } from '../service/comment.service';
 import { CreateCommentDto } from '../dto/create-comment.dto';
 import { UpdateCommentDto } from '../dto/update-comment.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GetCurrentUserId } from '../../../decorators/auth/custom.auth';
 
 @ApiBearerAuth()
 @ApiTags('Comment')
@@ -44,5 +45,12 @@ export class CommentController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.commentService.remove(+id);
+    }
+
+    @ApiOperation({ summary: 'Comment by user' })
+    @Get('/user/')
+    commentByUser(@Body() createCommentDto: CreateCommentDto, @GetCurrentUserId() userId: number) {
+        createCommentDto.idUser = userId;
+        return this.commentService.create(createCommentDto);
     }
 }

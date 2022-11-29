@@ -3,6 +3,7 @@ import { PostService } from '../service/post.service';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { GetCurrentUserId } from '../../../decorators/auth/custom.auth';
 
 @ApiBearerAuth()
 @ApiTags('Post')
@@ -38,5 +39,12 @@ export class PostController {
     @ApiOperation({ summary: 'Delete post by id' })
     remove(@Param('id') id: string) {
         return this.postService.remove(+id);
+    }
+
+    @Post('/user/')
+    @ApiOperation({ summary: 'Post by user' })
+    postByUser(@Body() createPostDto: CreatePostDto, @GetCurrentUserId() userId: number) {
+        createPostDto.idUser = userId;
+        return this.postService.create(createPostDto);
     }
 }
